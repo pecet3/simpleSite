@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <title>ToDo list HTMX + GO</title>
+</head> 
+<body class="container max-w-xl mx-auto">
+    <header class="text-center mt-2 mb-8">
+        <h1 class="text-3xl">To Do HTMX + GO!</h1>
+    </header>
+    <form class="flex gap-4 justify-center">
+        <input type="text" class="input input-bordered" name="task" />
+        <button class="btn btn-accent" 
+        hx-post="/task/create" 
+        hx-target="#posts"
+        hx-swap="innerHTML">
+        Submit
+    </button>
+    </form>
+    <div  class="mt-2 mb-8">
+        
+        <h2 class="text-2xl font-thin">ToDo List</h2>
+
+            <ul class="bg-slate-800 p-2 rounded-md" id="posts">
+                {{block "Posts" . }}
+                {{ range . }}
+                <li class="text-xl flex 
+                justify-between border-b border-slate-600
+                items-center"
+                >
+
+                <p class="p-2 ">{{.Content}}</p>
+
+            <div class="flex gap-2 m-2 text-xl">
+                <button
+                class="btn btn-success hover:opacity-80 duration-300"
+                hx-put="/task/{{.Id}}"
+                hx-target="#posts"
+                hx-swap="innerHTML"
+                >
+                &#10003;
+            </button>
+            <button 
+                class="btn btn-error hover:opacity-80 duration-300"
+                hx-delete="/task/{{.Id}}"
+                hx-target="#todos"
+                hx-swap="innerHTML">
+                &#x2717;
+                </button>
+               </div>
+                </li>
+                {{end}}
+                {{end}}
+            </div>
+    </div>
+</body>
+</html>
