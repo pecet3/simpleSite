@@ -10,16 +10,16 @@ type Post struct {
 	UserId  uint64 `json:"user_id"`
 }
 
-func CreatePost(content string, userId uint64) error {
+func (p *Post) CreatePost() (*Post, error) {
 	query := "insert into posts (content, user_id) values ($1, $2)"
 
-	_, err := db.Query(query, content, userId)
+	_, err := db.Query(query, p.Content, p.UserId)
 	if err != nil {
-		return err
+		return nil, err
 
 	}
 
-	log.Printf("user_id: %v has created the new record in posts", userId)
+	log.Printf("user_id: %v has created the new record in posts", p.UserId)
 
-	return nil
+	return p, nil
 }
