@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -50,4 +51,30 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	refreshPosts(w)
+}
+
+func templating(w http.ResponseWriter, fileName string, filePath string, data interface{}) error {
+	tmp := template.Must(template.ParseFiles("./view/static/index.html"))
+
+	err := tmp.ExecuteTemplate(w, fileName, data)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func Register(w http.ResponseWriter, r *http.Request) {
+	method := r.Method
+
+	fmt.Println(method)
+
+	if method == "GET" {
+		tmp := template.Must(template.ParseFiles("./view/static/register.html"))
+
+		err := tmp.Execute(w, "register")
+		if err != nil {
+			log.Fatal("error during creating task:", err)
+		}
+
+	}
 }
