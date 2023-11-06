@@ -14,9 +14,9 @@
         <h1 class="text-3xl">To Do HTMX + GO!</h1>
     </header>
     <form class="flex gap-4 justify-center">
-        <input type="text" class="input input-bordered" name="task" />
+        <input type="text" class="input input-bordered" name="content" />
         <button class="btn btn-accent" 
-        hx-post="/task/create" 
+        hx-post="/post" 
         hx-target="#posts"
         hx-swap="innerHTML">
         Submit
