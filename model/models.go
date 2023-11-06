@@ -9,6 +9,11 @@ type Post struct {
 	Content string `json:"content"`
 	UserId  uint64 `json:"user_id"`
 }
+type User struct {
+	Id       uint64 `json:"id"`
+	Name     string `json:"name"`
+	Password string `json:"password"`
+}
 
 func (p *Post) CreatePost() (*Post, error) {
 	query := "insert into posts (content, user_id) values ($1, $2);"
@@ -22,6 +27,20 @@ func (p *Post) CreatePost() (*Post, error) {
 	log.Printf("user_id: %v has created a new record in posts", p.UserId)
 
 	return p, nil
+}
+
+func (u *User) RegisterUser() (*User, error) {
+	query := "insert into users (name, password) values ($1, $2);"
+
+	_, err := db.Query(query, u.Name, u.Password)
+	if err != nil {
+		return nil, err
+
+	}
+
+	log.Printf("user of id: %v has created created", u.Id)
+
+	return u, nil
 }
 
 func GetAllPosts() ([]Post, error) {
@@ -46,6 +65,6 @@ func GetAllPosts() ([]Post, error) {
 
 		posts = append(posts, post)
 	}
-	
+
 	return posts, nil
 }
