@@ -42,6 +42,7 @@ func SetupAndRun() {
 	port := ":5000"
 
 	mux.HandleFunc("/", controller.Index)
+	mux.HandleFunc("/post", controller.CreatePost).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(port, mux))
 }
