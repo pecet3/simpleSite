@@ -19,5 +19,5 @@ func ConnectDb() {
 	if err != nil {
 		fmt.Println("error during open sql")
 	}
-	fmt.Println(db)
+
 }
