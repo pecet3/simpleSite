@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <title>ToDo list HTMX + GO</title>
+    <title>Simple Site HTMX + GO</title>
 </head> 
 <body class="container max-w-xl mx-auto">
     <header class="text-center mt-2 mb-8">
@@ -18,13 +18,14 @@
         <button class="btn btn-accent" 
         hx-post="/post" 
         hx-target="#posts"
-        hx-swap="innerHTML">
+        hx-swap="innerHTML"
+        hx-headers='{"Authorization": "Bearer YOUR_JWT_TOKEN"}'>
         Submit
     </button>
     </form>
     <div  class="mt-2 mb-8">
         
-        <h2 class="text-2xl font-thin">ToDo List</h2>
+        <h2 class="text-2xl font-thin">Posts</h2>
 
             <ul class="bg-slate-800 p-2 rounded-md" id="posts">
                 {{block "Posts" . }}
