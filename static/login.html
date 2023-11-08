@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,21 +8,37 @@
     <script src="https://unpkg.com/htmx.org@1.9.6"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-
     <title>Simple Site</title>
-</head> 
+</head>
 <body class="container max-w-xl mx-auto">
     <header class="text-center mt-2 mb-8">
         <h1 class="text-3xl">Login</h1>
     </header>
-    <form class="flex flex-col gap-4 justify-center">
+    <form class="flex flex-col gap-4 justify-center" id="login-form">
         <input type="text" class="input input-bordered" name="name" placeholder="name"/>
         <input type="password" class="input input-bordered" name="password" placeholder="password"/>
-        <button class="btn btn-accent" 
-        hx-post="/login" 
-        >
-        Submit
-    </button>
+        <button class="btn btn-accent" hx-post="/login" hx-trigger="click" hx-target="#login-form" hx-swap="innerHTML">
+            Submit
+        </button>
     </form>
+    <script>
+        // Obsługa odpowiedzi po zalogowaniu
+        document.getElementById("login-form").addEventListener("htmx:afterRequest", function (event) {
+            if (event.detail.xhr.status === 200) {
+                // Jeśli żądanie było udane, odczytaj token JWT z odpowiedzi
+                const responseData = event.detail.xhr.responseText;
+                console.log(responseData)
+                try {
+                    const data = JSON.parse(responseData);
+                    const jwtToken = data.token;
+                    
+                    // Zapisz token JWT w ciasteczku
+                    document.cookie = `jwtToken=${jwtToken}; path=/;`;
+                } catch (error) {
+                    console.error("Błąd podczas odczytywania tokena JWT z odpowiedzi serwera");
+                }
+            }
+        });
+    </script>
 </body>
 </html>
