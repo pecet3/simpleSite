@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
@@ -28,6 +29,25 @@ func refreshPosts(w http.ResponseWriter) {
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	posts, err := model.GetAllPosts()
+	tokenString := r.Header.Get("Authorization")
+	fmt.Println(tokenString)
+	if tokenString == "" {
+		// Brak tokenu JWT w nagłówku, możesz zwrócić błąd lub inny komunikat
+		return
+	}
+
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Nieprawidłowa metoda podpisywania tokena")
+		}
+		return jwtKey, nil
+	})
+
+	if err != nil || !token.Valid {
+		// Token JWT jest nieprawidłowy lub wygasły, możesz zwrócić błąd autoryzacji
+		return
+	}
+
 	if err != nil {
 		log.Fatal("error get all posts: ", err)
 	}
@@ -136,11 +156,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		token := jwt.New(jwt.SigningMethodHS256)
 		claims := token.Claims.(jwt.MapClaims)
 		claims["name"] = user.Name
-		fmt.Println(token)
 
 		tokenString, err := token.SignedString(jwtKey)
 
 		w.Header().Set("Authorization", "Bearer "+tokenString)
-
+		response := map[string]interface{}{"token": tokenString}
+		json.NewEncoder(w).Encode(response)
 	}
 }
