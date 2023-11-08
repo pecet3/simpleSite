@@ -11,14 +11,13 @@
 </head> 
 <body class="container max-w-xl mx-auto">
     <header class="text-center mt-2 mb-8">
-        <h1 class="text-3xl">login</h1>
+        <h1 class="text-3xl">Login</h1>
     </header>
     <form class="flex flex-col gap-4 justify-center">
         <input type="text" class="input input-bordered" name="name" placeholder="name"/>
         <input type="password" class="input input-bordered" name="password" placeholder="password"/>
-        <input type="password" class="input input-bordered" name="repeatedPassword" placeholder="repeat a password"/>
         <button class="btn btn-accent" 
-        hx-post="/register" 
+        hx-post="/login" 
         >
         Submit
     </button>
