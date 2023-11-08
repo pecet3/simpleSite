@@ -44,6 +44,6 @@ func SetupAndRun() {
 	mux.HandleFunc("/", controller.Index)
 	mux.HandleFunc("/post", controller.CreatePost).Methods("POST")
 	mux.HandleFunc("/register", controller.Register).Methods("POST", "GET")
-
+	mux.HandleFunc("/login", controller.Login).Methods("POST", "GET")
 	log.Fatal(http.ListenAndServe(port, mux))
 }
