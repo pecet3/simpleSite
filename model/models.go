@@ -68,3 +68,28 @@ func GetAllPosts() ([]Post, error) {
 
 	return posts, nil
 }
+
+func GetUserByName(name string) ([]User, error) {
+	var users []User
+
+	query := "select * from users where name = $1;"
+
+	rows, err := db.Query(query, name)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var user User
+		err := rows.Scan(&user.Id, &user.Name, &user.Password)
+
+		if err != nil {
+			return nil, err
+		}
+
+		users = append(users, user)
+	}
+
+	return users, nil
+}
