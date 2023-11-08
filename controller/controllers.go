@@ -6,7 +6,11 @@ import (
 	"log"
 	"net/http"
 	"simpleSite/model"
+
+	"github.com/dgrijalva/jwt-go"
 )
+
+var jwtKey = []byte("tajny_klucz_jwt")
 
 func refreshPosts(w http.ResponseWriter) {
 	posts, err := model.GetAllPosts()
@@ -30,7 +34,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	tmp := template.Must(template.ParseFiles("./static/index.html"))
 
-	err = tmp.ExecuteTemplate(w, "Posts", posts)
+	err = tmp.Execute(w, posts)
 	if err != nil {
 		log.Fatal("error executing index.html: ", err)
 	}
@@ -96,6 +100,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	method := r.Method
+
 	if method == "GET" {
 		tmp := template.Must(template.ParseFiles("./static/login.html"))
 
@@ -120,11 +125,22 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(usersDb)
 
 		if usersDb[0].Password != user.Password {
-			fmt.Println("lol")
+			fmt.Println()
+			return
 		}
 
 		fmt.Println(usersDb)
 
 		fmt.Println("p1: ", user.Password, "p2: ", usersDb[0].Password)
+
+		token := jwt.New(jwt.SigningMethodHS256)
+		claims := token.Claims.(jwt.MapClaims)
+		claims["name"] = user.Name
+		fmt.Println(token)
+
+		tokenString, err := token.SignedString(jwtKey)
+
+		w.Header().Set("Authorization", "Bearer "+tokenString)
+
 	}
 }
