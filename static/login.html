@@ -25,7 +25,6 @@
         // Obsługa odpowiedzi po zalogowaniu
         document.getElementById("login-form").addEventListener("htmx:afterRequest", function (event) {
             if (event.detail.xhr.status === 200) {
-                // Jeśli żądanie było udane, odczytaj token JWT z odpowiedzi
                 const responseData = event.detail.xhr.responseText;
                 console.log(responseData)
                 try {
